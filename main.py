@@ -14,6 +14,23 @@ class NumberGuessingGame:
         self.num_guesses = 0
         self.max_guesses = 5
 
+        self.canvas = tk.Canvas(self.root, width=400, height=300, bg="#f0f4f8", highlightthickness=0)
+        self.canvas.place(x=0, y=0, relwidth=1, relheight=1)
+
+        self.shapes = []
+        self.speeds = []
+        colors = ["#FFB6C1", "#87CEFA", "#98FB98", "#FFD700"]
+        for _ in range(6):
+            x = random.randint(0, 380)
+            y = random.randint(0, 280)
+            size = random.randint(15, 25)
+            color = random.choice(colors)
+            shape = self.canvas.create_oval(x, y, x+size, y+size, fill=color, outline="")
+            self.shapes.append(shape)
+            self.speeds.append((random.choice([-1, 1]), random.choice([-1, 1])))
+
+        self.animate_shapes()
+
         self.title_label = tk.Label(root, text="Guess a number between 1 and 100", font=("Arial", 14), bg="#f0f4f8")
         self.title_label.pack(pady=20)
 
@@ -29,6 +46,18 @@ class NumberGuessingGame:
         self.reset_button = tk.Button(root, text="Play Again", command=self.reset_game, font=("Arial", 10), bg="#2196F3", fg="white")
         self.reset_button.pack(pady=10)
         self.reset_button.config(state="disabled")
+
+    def animate_shapes(self):
+        for i, shape in enumerate(self.shapes):
+            dx, dy = self.speeds[i]
+            self.canvas.move(shape, dx, dy)
+            x0, y0, x1, y1 = self.canvas.coords(shape)
+            if x0 <= 0 or x1 >= 400:
+                dx *= -1
+            if y0 <= 0 or y1 >= 300:
+                dy *= -1
+            self.speeds[i] = (dx, dy)
+        self.root.after(30, self.animate_shapes)   
 
     def check_guess(self):
         guess = self.entry.get()
