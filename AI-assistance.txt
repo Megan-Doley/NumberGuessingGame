@@ -1,0 +1,4 @@
+Assessment 2: GitHub Repository (Permitting full GenAI co-creation)
+project development with AI (ChatGPT):
+-AI assisted development of game code structure
+-AI feature suggestions used to improve game functionality and user experience
